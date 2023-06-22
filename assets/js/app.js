@@ -5,128 +5,45 @@ const $n = document.querySelector('.name');
 const $b = document.querySelector('.blog');
 const $l = document.querySelector('.location');
 
-// function displayUser(username) {
-//   $n.textContent = 'cargando...';
-//   // const response = await fetch(`${usersEndpoint}/${username}`);
-//   const data = fetch(`${usersEndpoint}/${username}`);
-//   // console.log(data);
-//   console.log(data);
-//   // Se cambiaron las comillas dobles por backticks para activar las plantillas literales
-//   $n.textContent = `${data.name}`;
-//   $b.textContent = `${data.blog}`;
-//   $l.textContent = `${data.location}`;
-// }
-
-// function handleError(err) {
-//   console.log('OH NO!');
-//   console.log(err);
-//   n.textContent = `Algo salió mal: ${err}`;
-// }
-
-//!V2 GMG
-// function displayUser(username) {
-//   $n.textContent = 'cargando...';
-//   // const response = await fetch(`${usersEndpoint}/${username}`);
-//   const data = fetch(`${usersEndpoint}/${username}`)
-//   //Se anexa la "resolucion de la promesa"
-//   .then(respuesta => respuesta.json())  //Conevrtimos en un JSON los datos que "respondió" la api
-//   .then((pintarDOM) => {  //almacenamos los datos obtenidos en una fucnión flecha que devuelve una variable llamada pintarDOM
-//                           // !Esta variable ya recibe el valor como un JSOn
-//     console.log(pintarDOM); //Imprimimos TODO el objeto
-//     // Se cambiaron las comillas dobles por backticks para activar las plantillas literales
-//     // *Para poder "pintar el DOM" debemos decirle a las plantillas litarales que van a tomar los valores del objeto pintarDOM y NO de data que esta validando la conexión con la api como estaba al principio
-//     $n.textContent = `${pintarDOM.name}`;
-//     $b.textContent = `${pintarDOM.blog}`;
-//     $l.textContent = `${pintarDOM.location}`;
-//   })
-//   .catch(error => {
-//     reject(handleError(error));
-//   });
-// }
-
-// function handleError(err) {
-//   console.log('OH NO!');
-//   console.log(err);
-//   n.textContent = `Algo salió mal: ${err}`;
-// }
-
-// function displayUser(username) {
-//   $n.textContent = 'cargando...';
-//   // const response = await fetch(`${usersEndpoint}/${username}`);
-//   const data = new Promise((resolve, reject) =>{
-//   fetch(`${usersEndpoint}/${username}`)
-//   //Se anexa la "resolucion de la promesa"
-//   .then(respuesta => respuesta.json())  //Conevrtimos en un JSON los datos que "respondió" la api
-//   .then((pintarDOM) => {  //almacenamos los datos obtenidos en una fucnión flecha que devuelve una variable llamada pintarDOM
-//                           // !Esta variable ya recibe el valor como un JSOn
-                          
-//     console.log(pintarDOM); //Imprimimos TODO el objeto
-//     // Se cambiaron las comillas dobles por backticks para activar las plantillas literales
-//     // *Para poder "pintar el DOM" debemos decirle a las plantillas litarales que van a tomar los valores del objeto pintarDOM y NO de data que esta validando la conexión con la api como estaba al principio
-//     $n.textContent = `${pintarDOM.name}`;
-//     $b.textContent = `${pintarDOM.blog}`;
-//     $l.textContent = `${pintarDOM.location}`;
-//   })
-//   .catch(error => {
-//     reject(handleError(error));
-//   });
-// });
-// }
-
-// function handleError(err) {
-//   console.log('OH NO!');
-//   console.log(err);
-//   n.textContent = `Algo salió mal: ${err}`;
-// }
-
-// //!V3 GMG
-
-//Se le anexó un "async" pq es función asincrona
 function displayUser(username) {
   $n.textContent = 'cargando...';
-
-  // const data = fetch(`${usersEndpoint}/${username}`)
-  fetch(`${usersEndpoint}/${username}`)
-  .then(respuesta => respuesta.json())  //Conevrtimos en un JSON los datos que "respondió" la api
-  .then(pintarDOM => {   //almacenamos los datos obtenidos en una fucnión flecha que devuelve una variable llamada pintarDOM
-    console.log(pintarDOM); //Imprimimos TODO el objeto
-    // Se cambiaron las comillas dobles por backticks para activar las plantillas literales
-    $n.textContent = `${pintarDOM.name}`;
-    $b.textContent = `${pintarDOM.blog}`;
-    $l.textContent = `${pintarDOM.location}`;
-  })
-  .catch(err => {
-    // !No se logró que se entre a cachar el error :c
-      alert("Estoy funcinando");
-    handleError(err);
-  })
+  //Se eliminó el await ya que NO estamos trabajando con funciones asincronas
+  const response = fetch(`${usersEndpoint}/${username}`)
+  //Se anexaron los metodos de fetch, los .then() y .catch()
+    .then(respuesta => {
+      //Se tuvo que verificar la respuesta del estado de la solicitud
+      // https://developer.mozilla.org/es/docs/Web/API/Response
+      if (respuesta.ok) {
+        return respuesta.json()//Convertimos en un JSON los datos que "respondió" la api que vienen como cadena
+      }
+      else {
+        //capturamos el error del código de estado
+        // https://developer.mozilla.org/es/docs/Web/HTTP/Status/404?utm_source=mozilla&utm_medium=devtools-netmonitor&utm_campaign=default
+        throw new Error('Error al obtener los datos(Error 404), la solicitud falló con el código: ' + respuesta.status);
+      }
+    })
+    .then(pintarDOM => {   //almacenamos los datos obtenidos en una función flecha que obtiene en una variable llamada pintarDOM los datos de la API
+      console.log(pintarDOM);//Imprimimos TODO el objeto
+      // Se cambiaron las comillas dobles por backticks para activar las plantillas literales
+      //Para poder "pintar el DOM" debemos decirle a las plantillas litarales que van a tomar los valores del objeto pintarDOM y NO de data que esta validando la conexión con la api como estaba al principio
+      $n.textContent = `${pintarDOM.name}`;
+      $b.textContent = `${pintarDOM.blog}`;
+      $l.textContent = `${pintarDOM.location}`;
+    })
+    .catch(error => {
+      handleError(error);
+    });
+  console.log(response.name);
+    //Se añadió el retorno de la función ya que el metodo fetch se colocó dentro de una variable, pendiente saber pq se optó esto si ya se encontraba dentro de una función y no se repite código
+  return response
 }
 
 function handleError(err) {
   console.log('OH NO!');
   console.log(err);
-  $n.textContent = `Algo salió mal: ${err}`;
+  $n.textContent = `Algo salió mal: ${err}`
 }
 
-// //!V4 GMG
-// function displayUser(username) {
-//   $n.textContent = 'cargando...';
-//   fetch(`${usersEndpoint}/${username}`)
-//   .then(respuesta => respuesta.json())
-//   .then(pintarDOM => $n.textContent = `${pintarDOM.name}`)
-//   .catch(error => {
-//     handleError(error);
-//   });
-
-// }
-
-// function handleError(err) {
-//   console.log('OH NO!');
-//   console.log(err);
-//   $n.textContent = `Algo salió mal: ${err}`;
-// }
-
-// console.log(displayUser('stolinski').then().catch());
-
-//Se hizo pruebas de que los datos del usuario stolinski sean obtenidos correctamente lo cual funciona bien
+//Se hizo pruebas de que los datos del usuario stolinski sean obtenidos correctamente lo cual funciona
+//Se llamo unicamente a la función dandole el parámetro de entrada de un nombre de usuario
 displayUser('stolinski');

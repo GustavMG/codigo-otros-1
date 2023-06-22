@@ -5,10 +5,10 @@ const $n = document.querySelector('.name');
 const $b = document.querySelector('.blog');
 const $l = document.querySelector('.location');
 
-function displayUser(username) {
+async function displayUser(username) {
   $n.textContent = 'cargando...';
   //Se eliminó el await ya que NO estamos trabajando con funciones asincronas
-  const response = fetch(`${usersEndpoint}/${username}`)
+  const response = await fetch(`${usersEndpoint}/${username}`)
   //Se anexaron los metodos de fetch, los .then() y .catch()
     .then(respuesta => {
       //Se tuvo que verificar la respuesta del estado de la solicitud
@@ -33,7 +33,6 @@ function displayUser(username) {
     .catch(error => {
       handleError(error);
     });
-  console.log(response.name);
     //Se añadió el retorno de la función ya que el metodo fetch se colocó dentro de una variable, pendiente saber pq se optó esto si ya se encontraba dentro de una función y no se repite código
   return response
 }
@@ -46,4 +45,4 @@ function handleError(err) {
 
 //Se hizo pruebas de que los datos del usuario stolinski sean obtenidos correctamente lo cual funciona
 //Se llamo unicamente a la función dandole el parámetro de entrada de un nombre de usuario
-displayUser('stolinski');
+displayUser('stolinskii');

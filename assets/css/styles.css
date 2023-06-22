@@ -31,10 +31,10 @@ body {
   background-size: 15px;
 }
 
-
+/* !Se comentan estos estilos que NO se estan utilizando */
 /* Table Styles */
 
-table {
+/* table {
   border-radius: 5px;
   overflow: hidden;
   margin-bottom: 2rem;
@@ -44,12 +44,12 @@ table {
 td, th {
   border: 1px solid var(--grey);
   padding: 0.5rem;
-}
+} */
 
 
 /* Helper Divs */
 
-.wrapper {
+/* .wrapper {
   max-width: 1000px;
   margin: 4rem auto;
   padding: 2rem;
@@ -113,4 +113,4 @@ h6 {
 .wrapper h6 {
   color: var(--black);
   text-shadow: none;
-}
+} */

@@ -89,7 +89,7 @@ function displayUser(username) {
   fetch(`${usersEndpoint}/${username}`)
   .then(respuesta => respuesta.json())  //Conevrtimos en un JSON los datos que "respondió" la api
   .then(pintarDOM => {   //almacenamos los datos obtenidos en una fucnión flecha que devuelve una variable llamada pintarDOM
-    // console.log(pintarDOM); //Imprimimos TODO el objeto
+    console.log(pintarDOM); //Imprimimos TODO el objeto
     // Se cambiaron las comillas dobles por backticks para activar las plantillas literales
     $n.textContent = `${pintarDOM.name}`;
     $b.textContent = `${pintarDOM.blog}`;
